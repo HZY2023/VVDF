@@ -1,11 +1,52 @@
-# MM2024-Virtual-Visual-Guided-Domain-Shadow-Fusion-via-Modal-Exchanging
-The detailed description for Virtual Visual-Guided Domain-Shadow Fusion via Modal Exchanging
+# VVDF: Virtual Visual-Guided Domain-Shadow Fusion via Modal Exchanging
 
-The steps for running our method: 1.1 bash data-process.sh; 1.2 bash data-train-large.sh (Fashion-MMT(large)); 1.3 bash data-checkpoint.sh; 1.4 bash data-generate.sh
+[![ACM MM 2024](https://img.shields.io/badge/ACM%20MM-2024-blue)](https://openreview.net/forum?id=dxbHuJtIpK)
+[![Framework](https://img.shields.io/badge/Framework-fairseq-green)](https://github.com/facebookresearch/fairseq)
+[![PyTorch](https://img.shields.io/badge/PyTorch-Implemented-red)](https://pytorch.org/)
 
-In fairseq.tasks.translation.py, we manually set the address for visual features extracted from the pre-trained ResNet-101 model to avoid memory overflow issues, as the visual features are too large to handle efficiently. Additionally, please note that "data-bin-small-1," "data-bin-large-all," "EMMT," and "data-bin-2" represent the processed Fashion-MMT (clean), Fashion-MMT (large), EMMT, and Multi-30k datasets, respectively. If you have sufficient memory space, you can also extract visual features and incorporate them into the corresponding datasets. 
+This repository provides the implementation of our ACM MM 2024 paper:
 
-Detailed model configuration could be found in the paper.
+> **Virtual Visual-Guided Domain-Shadow Fusion via Modal Exchanging**  
+> Zhenyu Hou, Yuxiang Guo  
+> ACM International Conference on Multimedia, 2024
 
-If you have any questions, please feel free to contact me at the following email address: hzy23@stu.kust.edu.cn.
+VVDF is a multimodal machine translation framework designed to improve text generation by effectively exploiting visual information. The method introduces a virtual visual-guided domain-shadow fusion strategy and a modal exchanging mechanism to encourage stronger interaction between textual and visual representations.
 
+---
+
+## Overview
+
+Multimodal machine translation aims to generate accurate target-language translations by jointly modeling source text and its associated visual context. However, visual features are often noisy, weakly aligned with text, or difficult to integrate effectively.
+
+VVDF addresses this problem by:
+
+- introducing visual-guided representation fusion for multimodal translation;
+- exchanging informative textual and visual representations during encoding;
+- using external visual features extracted from a pretrained ResNet-101 model;
+- building on top of the `fairseq` sequence modeling framework.
+
+The codebase is modified from `fairseq` and contains the core implementation of the proposed multimodal encoder, data loading logic, training scripts, checkpoint averaging, and generation scripts.
+
+---
+
+## Repository Structure
+
+```text
+VVDF/
+├── fairseq/                  # Modified fairseq source code
+│   ├── models/transformer.py # Main VVDF-related Transformer modifications
+│   ├── tasks/translation.py  # Dataset loading and visual-feature loading logic
+│   └── criterions/           # Training losses
+├── scripts/
+│   └── average_checkpoints.py
+├── config/                   # Example configuration files
+├── data-process.sh           # Data preprocessing example
+├── data-train.sh             # General training example
+├── data-train-small.sh       # Small-setting training example
+├── data-train-large.sh       # Large-setting training example
+├── data-checkpoint.sh        # Checkpoint averaging example
+├── data-generate.sh          # Inference / generation example
+├── train.py
+├── generate.py
+├── preprocess.py
+└── README.md
